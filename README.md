@@ -35,13 +35,21 @@ Aplicação web do tipo **Single Page Application (SPA)** desenvolvida para gere
 ## 📁 Arquitetura do Projeto
 
 ```text
-lista-compras/
-├── index.html          # Estrutura semântica da SPA
+lista_compras/
+├── .github/
+│   └── workflows/
+│       └── deploy.yml
+├── assets/
+│   └── img/
 ├── css/
-│   └── style.css       # Estilização responsiva (Desktop & Mobile)
+│   └── style.css
+├── data/
+│   └── produtos.json
 ├── js/
-│   ├── dados.js        # Gerenciamento de estado, localStorage e I/O de JSON
-│   ├── interface.js    # Renderização segura do DOM a partir do estado
-│   └── app.js          # Regras de negócio, delegação de eventos e inicialização
-└── data/
-    └── produtos.json   # Base inicial de produtos 
+│   ├── app.js
+│   ├── dados.js
+│   └── interface.js
+├── .gitignore
+├── index.html
+└── README.md
+```
