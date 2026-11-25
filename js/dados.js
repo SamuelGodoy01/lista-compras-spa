@@ -185,3 +185,10 @@ async function importarJSON(arquivo) {
     if (validarLista(dados)) return { tipo: 'lista', dados };
     throw new Error('Estrutura desconhecida: use produtos.json ou lista.json.');
 }
+
+window.formatarMoeda = formatarMoeda;
+window.normalizar = normalizar;
+window.gerarId = gerarId;
+window.salvar = salvar;
+window.obterListaAtual = obterListaAtual;
+window.definirListaAtual = definirListaAtual;

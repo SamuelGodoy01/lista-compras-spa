@@ -53,13 +53,33 @@ function renderizarProdutos() {
         .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
         .forEach(p => {
             const li = document.createElement('li');
-            const esquerda = document.createElement('span');
-            esquerda.textContent = `${p.nome} · ${p.unidade} (${p.categoria || 'Outros'})`;
+            li.dataset.id = p.id;
 
-            const direita = document.createElement('span');
-            direita.textContent = p.precoUnitario > 0 ? formatarMoeda(p.precoUnitario) : '-';
+            const info = document.createElement('div');
+            info.className = 'prod-info';
+            info.textContent = `${p.nome} · ${p.unidade} (${p.categoria || 'Outros'})`;
 
-            li.append(esquerda, direita);
+            const acoes = document.createElement('div');
+            acoes.className = 'prod-acoes';
+
+            const preco = document.createElement('span');
+            preco.className = 'prod-preco';
+            preco.textContent = p.precoUnitario > 0 ? formatarMoeda(p.precoUnitario) : '-';
+
+            const btnEditar = document.createElement('button');
+            btnEditar.className = 'btn-editar btn-editar-produto';
+            btnEditar.type = 'button';
+            btnEditar.textContent = '✏️';
+            btnEditar.title = 'Editar produto';
+
+            const btnRemover = document.createElement('button');
+            btnRemover.className = 'btn-remover btn-remover-produto';
+            btnRemover.type = 'button';
+            btnRemover.textContent = '🗑';
+            btnRemover.title = 'Excluir produto';
+
+            acoes.append(preco, btnEditar, btnRemover);
+            li.append(info, acoes);
             ul.appendChild(li);
         });
 }
@@ -167,6 +187,14 @@ function renderizarLista() {
     $('#cTotalPreco').textContent = formatarMoeda(c.valorTotal);
     $('#selo').textContent = c.pendentes;
     $('#vazia').classList.toggle('oculto', listaFiltrada.length > 0);
+
+    document.querySelectorAll('.btn-editar-produto').forEach(btn => {
+        btn.onclick = () => iniciarEdicaoProduto(btn.closest('li').dataset.id);
+    });
+
+    document.querySelectorAll('.btn-remover-produto').forEach(btn => {
+        btn.onclick = () => removerProduto(btn.closest('li').dataset.id);
+    });
 }
 
 function renderizar() {
@@ -176,3 +204,5 @@ function renderizar() {
     renderizarProdutos();
     renderizarLista();
 }
+
+window.buscarProduto = buscarProduto;

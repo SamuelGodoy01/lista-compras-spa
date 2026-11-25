@@ -2,6 +2,8 @@
 // app.js – regras de negócio, eventos e inicialização
 // =====================================================
 
+let produtoEmEdicaoId = null;
+
 function cadastrarProduto(nome, unidade, categoria, precoUnitario) {
     const chave = normalizar(nome);
     if (!chave) return { ok: false, msg: 'Informe o nome do produto.' };
@@ -23,6 +25,73 @@ function cadastrarProduto(nome, unidade, categoria, precoUnitario) {
     });
     salvar();
     return { ok: true, msg: 'Produto cadastrado com sucesso!' };
+}
+
+function atualizarProduto(id, nome, unidade, categoria, precoUnitario) {
+    const produto = estado.produtos.find(p => p.id === id);
+    if (!produto) return { ok: false, msg: 'Produto não encontrado.' };
+
+    const chave = normalizar(nome);
+    if (!chave) return { ok: false, msg: 'Informe o nome do produto.' };
+    if (!UNIDADES.includes(unidade)) return { ok: false, msg: 'Unidade inválida.' };
+
+    const existente = estado.produtos.find(p => p.id !== id && normalizar(p.nome) === chave);
+    if (existente) return { ok: false, msg: `"${existente.nome}" já está cadastrado.` };
+
+    const precoLimpo = Number.isFinite(precoUnitario) && precoUnitario >= 0
+        ? Math.round(precoUnitario * 100) / 100
+        : 0;
+
+    produto.nome = nome.trim().replace(/\s+/g, ' ');
+    produto.unidade = unidade;
+    produto.categoria = CATEGORIAS.includes(categoria) ? categoria : 'Outros';
+    produto.precoUnitario = precoLimpo;
+
+    salvar();
+    return { ok: true, msg: 'Produto atualizado com sucesso!' };
+}
+
+function removerProduto(id) {
+    const produto = buscarProduto(id);
+    if (!produto) return;
+
+    if (!confirm(`Deseja realmente excluir o produto "${produto.nome}"?`)) return;
+
+    estado.produtos = estado.produtos.filter(p => p.id !== id);
+    Object.keys(estado.listas).forEach(nome => {
+        estado.listas[nome] = estado.listas[nome].filter(i => i.produtoId !== id);
+    });
+
+    if (produtoEmEdicaoId === id) {
+        cancelarEdicaoProduto();
+    }
+
+    salvar();
+    renderizar();
+}
+
+function iniciarEdicaoProduto(id) {
+    const p = buscarProduto(id);
+    if (!p) return;
+
+    produtoEmEdicaoId = p.id;
+    $('#nomeProduto').value = p.nome;
+    $('#unidade').value = p.unidade;
+    $('#categoria').value = p.categoria || 'Outros';
+    $('#precoUnitario').value = p.precoUnitario;
+
+    $('#btnSalvarProduto').textContent = 'SALVAR';
+    $('#btnCancelarEdicao').classList.remove('oculto');
+    $('#nomeProduto').focus();
+}
+
+function cancelarEdicaoProduto() {
+    produtoEmEdicaoId = null;
+    $('#formProduto').reset();
+    $('#precoUnitario').value = '0';
+    $('#btnSalvarProduto').textContent = 'CADASTRAR';
+    $('#btnCancelarEdicao').classList.add('oculto');
+    mostrarMensagem($('#msgProduto'), '', '');
 }
 
 function adicionarItem(produtoId, quantidade) {
@@ -156,19 +225,29 @@ function registrarEventos() {
 
     $('#formProduto').addEventListener('submit', (e) => {
         e.preventDefault();
-        const r = cadastrarProduto(
-            $('#nomeProduto').value,
-            $('#unidade').value,
-            $('#categoria').value,
-            Number($('#precoUnitario').value)
-        );
+        const nome = $('#nomeProduto').value;
+        const unidade = $('#unidade').value;
+        const categoria = $('#categoria').value;
+        const preco = Number($('#precoUnitario').value);
+
+        let r;
+        if (produtoEmEdicaoId) {
+            r = atualizarProduto(produtoEmEdicaoId, nome, unidade, categoria, preco);
+        } else {
+            r = cadastrarProduto(nome, unidade, categoria, preco);
+        }
+
         mostrarMensagem($('#msgProduto'), r.msg, r.ok ? 'ok' : 'erro');
         if (r.ok) {
-            e.target.reset();
-            $('#precoUnitario').value = '0';
+            cancelarEdicaoProduto();
             renderizar();
         }
         $('#nomeProduto').focus();
+    });
+
+    $('#btnCancelarEdicao').addEventListener('click', () => {
+        cancelarEdicaoProduto();
+        renderizar();
     });
 
     $('#formLista').addEventListener('submit', (e) => {
@@ -255,3 +334,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderizar();
     mostrarAba('lista');
 });
+
+window.iniciarEdicaoProduto = iniciarEdicaoProduto;
+window.cancelarEdicaoProduto = cancelarEdicaoProduto;
+window.removerProduto = removerProduto;
+window.atualizarProduto = atualizarProduto;

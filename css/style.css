@@ -279,6 +279,15 @@ body {
     color: #4caf50;
 }
 
+.botoes-form {
+    display: flex;
+    gap: 10px;
+}
+
+.botoes-form .btn-primario {
+    flex: 1;
+}
+
 .lista-simples {
     list-style: none;
     max-height: 190px;
@@ -292,7 +301,29 @@ body {
     font-size: 0.9rem;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 8px;
+}
+
+.prod-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.prod-acoes {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.prod-preco {
+    font-size: 0.85rem;
+    color: var(--cor-texto-suave);
+    margin-right: 4px;
 }
 
 .cabecalho-lista {
@@ -437,6 +468,22 @@ body {
     cursor: pointer;
     font-size: 1.05rem;
     padding: 4px;
+}
+
+.btn-editar-produto,
+.btn-remover-produto {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 4px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.btn-editar-produto:hover,
+.btn-remover-produto:hover {
+    opacity: 1;
 }
 
 .rodape {
