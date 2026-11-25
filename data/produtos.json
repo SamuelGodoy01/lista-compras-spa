@@ -2,26 +2,36 @@
     {
         "id": "p1",
         "nome": "Arroz",
-        "unidade": "kg"
+        "unidade": "kg",
+        "categoria": "Mercearia",
+        "precoUnitario": 5.50
     },
     {
         "id": "p2",
         "nome": "Feijão",
-        "unidade": "kg"
+        "unidade": "kg",
+        "categoria": "Mercearia",
+        "precoUnitario": 7.80
     },
     {
         "id": "p3",
         "nome": "Leite",
-        "unidade": "L"
+        "unidade": "L",
+        "categoria": "Laticínios",
+        "precoUnitario": 4.60
     },
     {
         "id": "p4",
         "nome": "Ovos",
-        "unidade": "dz"
+        "unidade": "dz",
+        "categoria": "Laticínios",
+        "precoUnitario": 11.00
     },
     {
         "id": "p5",
         "nome": "Café",
-        "unidade": "pct"
+        "unidade": "pct",
+        "categoria": "Mercearia",
+        "precoUnitario": 16.50
     }
 ]

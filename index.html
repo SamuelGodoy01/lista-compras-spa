@@ -10,20 +10,27 @@
 
 <body>
     <div class="container">
-        <!-- 1. Cabeçalho -->
         <header class="topo">
-            <h1>🛒 Lista de Compras</h1>
+            <div class="topo-esq">
+                <h1>🛒 Lista de Compras</h1>
+                <div class="seletor-lista">
+                    <label for="selListaAtiva">Lista ativa:</label>
+                    <select id="selListaAtiva"></select>
+                    <button type="button" id="btnNovaLista" class="btn-mini">+ Nova</button>
+                </div>
+            </div>
+
             <nav class="abas">
                 <button type="button" class="aba ativa" data-aba="lista">Lista</button>
                 <button type="button" class="aba" data-aba="produtos">Produtos</button>
+                <button type="button" id="btnTema" class="btn-icone" title="Alternar tema">🌙</button>
                 <span id="selo" class="selo" title="Itens pendentes">0</span>
             </nav>
         </header>
 
         <main class="layout">
-            <!-- Coluna Esquerda (no Desktop) / Aba Produtos (no Mobile) -->
             <div class="coluna-formularios">
-                <!-- 2. Cadastro de Produto (Oculto na aba Lista em telas pequenas) -->
+                <!-- Cadastro de Produto (com categoria e preço estimado) -->
                 <section id="secaoProdutos" data-secao="produtos" class="card">
                     <h2>Cadastrar produto</h2>
                     <form id="formProduto">
@@ -31,18 +38,36 @@
                             <label for="nomeProduto">Nome do produto</label>
                             <input type="text" id="nomeProduto" placeholder="Ex.: Açúcar" required>
                         </div>
+                        <div class="campo-linha">
+                            <div class="campo">
+                                <label for="unidade">Unidade</label>
+                                <select id="unidade" required>
+                                    <option value="un">un</option>
+                                    <option value="kg">kg</option>
+                                    <option value="g">g</option>
+                                    <option value="L">L</option>
+                                    <option value="ml">ml</option>
+                                    <option value="pct">pct</option>
+                                    <option value="dz">dz</option>
+                                    <option value="cx">cx</option>
+                                </select>
+                            </div>
+                            <div class="campo">
+                                <label for="categoria">Categoria</label>
+                                <select id="categoria" required>
+                                    <option value="Mercearia">Mercearia</option>
+                                    <option value="Hortifrúti">Hortifrúti</option>
+                                    <option value="Laticínios">Laticínios</option>
+                                    <option value="Limpeza">Limpeza</option>
+                                    <option value="Bebidas">Bebidas</option>
+                                    <option value="Açougue e Frios">Açougue e Frios</option>
+                                    <option value="Outros">Outros</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="campo">
-                            <label for="unidade">Unidade</label>
-                            <select id="unidade" required>
-                                <option value="un">un (Unidade)</option>
-                                <option value="kg">kg (Quilograma)</option>
-                                <option value="g">g (Grama)</option>
-                                <option value="L">L (Litro)</option>
-                                <option value="ml">ml (Mililitro)</option>
-                                <option value="pct">pct (Pacote)</option>
-                                <option value="dz">dz (Dúzia)</option>
-                                <option value="cx">cx (Caixa)</option>
-                            </select>
+                            <label for="precoUnitario">Preço estimado por unidade (R$)</label>
+                            <input type="number" id="precoUnitario" min="0" step="0.01" placeholder="0,00" value="0">
                         </div>
                         <button type="submit" class="btn-primario">CADASTRAR</button>
                         <p id="msgProduto" class="msg" aria-live="polite"></p>
@@ -54,7 +79,7 @@
                     </div>
                 </section>
 
-                <!-- 3. Adicionar à Lista -->
+                <!-- Adicionar à Lista -->
                 <section class="card form-adicionar-desktop">
                     <h2>Adicionar à lista</h2>
                     <form id="formLista">
@@ -77,14 +102,13 @@
                 </section>
             </div>
 
-            <!-- Coluna Direita (no Desktop) / Aba Lista (no Mobile) -->
+            <!-- Minha Lista -->
             <section id="secaoLista" data-secao="lista" class="card">
                 <div class="cabecalho-lista">
-                    <h2>Minha lista</h2>
+                    <h2 id="tituloListaAtiva">Minha lista</h2>
                     <button type="button" id="btnLimparComprados" class="btn-secundario">Limpar comprados</button>
                 </div>
 
-                <!-- 4. Contador -->
                 <div class="contadores">
                     <div class="cartao-contador">
                         <span>Total</span>
@@ -98,18 +122,27 @@
                         <span>Pendentes</span>
                         <strong id="cPendentes">0</strong>
                     </div>
+                    <div class="cartao-contador destaque-valor">
+                        <span>Total estimado</span>
+                        <strong id="cTotalPreco">R$ 0,00</strong>
+                    </div>
                 </div>
 
-                <!-- 5. Lista de Compras -->
+                <div class="barra-filtros" role="group" aria-label="Filtrar itens">
+                    <button type="button" class="filtro ativa" data-filtro="todos">Todos</button>
+                    <button type="button" class="filtro" data-filtro="pendentes">Pendentes</button>
+                    <button type="button" class="filtro" data-filtro="comprados">Comprados</button>
+                </div>
+
                 <p id="vazia" class="estado-vazio">🛒 Sua lista está vazia. Adicione um produto!</p>
                 <ul id="lista" class="lista-compras"></ul>
             </section>
         </main>
 
-        <!-- 6. Rodapé de Dados -->
         <footer class="rodape">
             <button type="button" id="btnExportarProdutos" class="btn-outline">⬇ Exportar produtos.json</button>
             <button type="button" id="btnExportarLista" class="btn-outline">⬇ Exportar lista.json</button>
+            <button type="button" id="btnSalvarDireto" class="btn-outline">💾 Salvar direto em arquivo</button>
             <label class="btn-outline upload-label">
                 ⬆ Importar .json
                 <input type="file" id="arquivoJson" accept=".json" hidden>
@@ -117,7 +150,6 @@
         </footer>
     </div>
 
-    <!-- Scripts carregados ao final do body na ordem correta -->
     <script src="js/dados.js"></script>
     <script src="js/interface.js"></script>
     <script src="js/app.js"></script>
