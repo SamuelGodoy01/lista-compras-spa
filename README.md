@@ -2,7 +2,7 @@
 
 Aplicação web do tipo **Single Page Application (SPA)** desenvolvida para gerenciamento de listas de compras de supermercado, com cadastro de produtos, controle de quantidades, persistência local e importação/exportação em JSON.
 
-🔗 **Acesse a aplicação online:** https://listacomprassamuel.netlify.app
+🔗 **Acesse a aplicação online:** https://samuelgodoy01.github.io/lista-compras-spa/
 
 
 ---
