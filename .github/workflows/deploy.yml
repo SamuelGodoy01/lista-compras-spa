@@ -1,13 +1,10 @@
 name: Validar JSON e Publicar no GitHub Pages
 
 on:
-  # Executa toda vez que você enviar alterações para a branch main
   push:
     branches: ["main"]
-  # Permite rodar manualmente pela aba "Actions" no GitHub
   workflow_dispatch:
 
-# Permissões necessárias para publicar no GitHub Pages
 permissions:
   contents: read
   pages: write
@@ -33,7 +30,7 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: 4. Empacotar arquivos estáticos
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: '.'
 
