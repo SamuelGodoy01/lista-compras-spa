@@ -1,0 +1,42 @@
+name: Validar JSON e Publicar no GitHub Pages
+
+on:
+  # Executa toda vez que você enviar alterações para a branch main
+  push:
+    branches: ["main"]
+  # Permite rodar manualmente pela aba "Actions" no GitHub
+  workflow_dispatch:
+
+# Permissões necessárias para publicar no GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: 1. Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: 2. Validar sintaxe do produtos.json
+        run: |
+          python3 -m json.tool data/produtos.json > /dev/null
+          echo "JSON validado com sucesso!"
+
+      - name: 3. Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: 4. Empacotar arquivos estáticos
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: 5. Publicar site
+        id: deployment
+        uses: actions/deploy-pages@v4

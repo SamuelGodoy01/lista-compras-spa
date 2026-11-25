@@ -1,0 +1,8 @@
+# Sistemas Operacionais
+.DS_Store
+Thumbs.db
+
+# Editores e IDEs
+.vscode/
+.idea/
+*.swp

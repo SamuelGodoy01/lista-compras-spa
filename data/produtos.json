@@ -1,0 +1,27 @@
+[
+    {
+        "id": "p1",
+        "nome": "Arroz",
+        "unidade": "kg"
+    },
+    {
+        "id": "p2",
+        "nome": "Feijão",
+        "unidade": "kg"
+    },
+    {
+        "id": "p3",
+        "nome": "Leite",
+        "unidade": "L"
+    },
+    {
+        "id": "p4",
+        "nome": "Ovos",
+        "unidade": "dz"
+    },
+    {
+        "id": "p5",
+        "nome": "Café",
+        "unidade": "pct"
+    }
+]
